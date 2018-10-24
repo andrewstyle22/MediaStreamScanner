@@ -1,0 +1,153 @@
+﻿@page
+@model IndexModel
+@{
+  ViewData["Title"] = "Home page";
+}
+
+<div class="content">
+  <header class="title wrap">
+    <h1 class="title_main text-center">
+      <span class="col-md-12">
+        <img src="images/Ultebra_2.png" class="img-fluid" alt="Ultebra Solutions">
+      </span>
+    </h1>
+  </header>
+
+  <aside class="toast wrap text-center">
+    This demo requires Firefox&nbsp;49, Chrome&nbsp;49, Chrome&nbsp;for&nbsp;Android&nbsp;53, Opera&nbsp;41 or&nbsp;later. The https is required.
+  </aside>
+<div id="mainbody"></div>
+<main>
+  <div class="columns wrap">
+    <div class="column col-4 col-xs-12">
+      <div class="card j-card">
+        <div class="card-image">
+          <input id="videoIOS" type="file" name="Video" accept="video/*" capture>
+          <div style="display: flex;">
+            <button title="Play" class="btn btn-success btn-sm" id="playMobile" style="width: 33%;" type="button" data-toggle="tooltip"><span class="glyphicon glyphicon-play"></span></button>
+            <button title="Stop streams" class="btn btn-danger btn-sm" id="stopMobile" style="width: 33%;" type="button" data-toggle="tooltip"><span class="glyphicon glyphicon-stop"></span></button>
+            <button title="Decode Image" class="btn btn-default btn-sm" id="decode-imgMobile" style="width: 33%;" type="button" data-toggle="tooltip"><span class="glyphicon glyphicon-upload"></span></button>
+          </div>
+          <div class="video-responsive">
+            <div class="well" style="position: relative;display: contents;width: 100%;">
+              <canvas id="webcodecam-canvas" style="transform: scale(1, 1);width: 75%;margin: 0 auto;display: block;" width="320" height="240"></canvas>
+              <div class="scanner-laser laser-rightBottom" style="opacity: 0.5;display: block;"></div>
+              <div class="scanner-laser laser-rightTop" style="opacity: 0.5;display: block;"></div>
+              <div class="scanner-laser laser-leftBottom" style="opacity: 0.5;display: block;"></div>
+              <div class="scanner-laser laser-leftTop" style="opacity: 0.5;display: block;"></div>
+            </div>
+            <video id="videoRecord" class="j-video_local video" controls muted webkit-playsinline playsinline></video>
+          </div>
+        </div>
+
+        <div class="source">
+          <div class="form-group">
+            <select id="j-audioSource" class="invisible form-select select-sm"></select>
+          </div>
+
+          <div class="form-group">
+            <select id="j-videoSource" class="invisible form-select select-sm"></select>
+          </div>
+
+          <div class="form-group">
+            <select id="j-mimeTypes" class="invisible form-select select-sm"></select>
+          </div>
+        </div>
+
+        <div class="card-footer" style="display: flex;">
+          <div style="width:50%;">
+            <h5 class="card-title">Recording</h5>
+            <div id="record" class="btn-group btn-group-block">
+              <div>
+                <button class="btn j-start" style="">REC</button>
+                <button class="btn j-pause" disabled="">Pause</button>
+                <button class="btn j-resume" disabled="">Resume</button>
+                <button class="btn j-stop" disabled="">Stop</button></div>
+            </div>
+          </div>
+          <div style="width:50%;">
+            <h5 class="card-title">BarCode/Qr</h5>
+            <div id="recordCode" class="btn-group btn-group-block">
+              <div>
+                <button id="play" class="btn j-barcode">BarCode/Qr</button>
+                <button id="stop" class="btn j-stopBarcode" disabled="">Stop</button>
+                <button title="Decode Image" class="btn btn-default" id="decode-img" type="button" data-toggle="tooltip"><span class="glyphicon glyphicon-upload"></span></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="column col-4 col-xs-12">
+      <div class="card j-result-card">
+        <div class="card-image">
+          <input id="cameraIOS" type="file" name="Camera" accept="image/*" capture>
+          <div class="video-responsive photo">
+            <img id="scanned-img" src="" style="display: block;margin: 0 auto;width: 75%;">
+            <canvas id="canvas" class="j-video_local video2" style="width: 331px; height: 247px;"></canvas>
+            <canvas id="qr-canvas" width="800" height="600"></canvas>
+            <canvas id="out-canvas" width="320" height="240"></canvas>
+            <canvas id="pcCanvas" width="640" height="480" style="display: none; float: bottom;"></canvas>
+            <canvas id="mobileCanvas" width="240" height="320" style="display: none; float: bottom;"></canvas>
+          </div>
+          <div id="btnPictureIos" class="btn-group">
+            <button id="playVideoIos" class="btn" onClick="seePicture(event, this)">See</button>
+            <button id="donwloadVideoIos" class="btn" onClick="downloadPicture(event, this)">Donwload</button>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <h5 class="card-title">Photo</h5>
+          <div class="btn-group btn-group-block">
+            <button id="takeSnapshot2" class="btn j-picture" disabled>Take a picture</button>
+            <button id="downloadPicture" class="btn j-downloadPicture" disabled>Download</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="column col-4 col-xs-12">
+      <div class="card j-result-card">
+        <div class="card-image">
+          <div class="video-responsive">
+            <video id="videoSee" class="j-video_result video3" controls style="display: block;width: 100%;height: 100%;position: absolute;"></video>
+          </div>
+          <div id="btnVideoIos" class="btn-group">
+            <button id="playVideoIos" class="btn" onClick="seeVideo(event, this)">Play</button>
+            <button id="donwloadVideoIos" class="btn" onClick="downloadVideo(event, this)">Donwload</button>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <h5 class="card-title">Record</h5>
+          <div class="btn-group btn-group-block">
+            <button class="btn j-clear" disabled>Clear</button>
+            <button class="btn j-download" disabled>Download</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="column col-12 col-xs-12">
+      <div class="caption">
+        <label for="videoSource">Video source: </label>
+        <!--<select id="videoSource"></select>-->
+        <select class="form-control" id="camera-select"></select>
+        <p id="scanned-QR"></p>
+      </div>
+    </div>
+  </div>
+
+</main>
+</div>
+
+
+<script type="text/javascript">
+    var ua = window.navigator.userAgent;
+    var msie = ua.indexOf("MSIE ");
+    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+        document.write('<script src=cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.5//bluebird.min.js;><\/script>');
+        document.write('<script src=js/download.min.js;><\/script>');
+    }
+</script>
